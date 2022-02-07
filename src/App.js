@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import reactDom from 'react-dom';
+import React, { useState, useEffect } from 'react';
 
 var regularParaStyle = {
   color: '#282C35',
@@ -11,20 +12,59 @@ var regularParaStyle = {
 }
 
 function App() {
+
+  const users = [
+    {id: 1, name: 'Sadiqul islam', views: 2567},
+    {id: 2, name: 'Saifur Rahman', views: 5689},
+    {id: 3, name: 'Syed Murtaza', views: 4152},
+    {id: 4, name: 'Albab Majed', views: 1456},
+  ]
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p className="regular-para" style={regularParaStyle}>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <p className="regular-para" style={regularParaStyle}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel fugit beatae dolore modi tempora laborum dolorum! Explicabo nemo numquam eius.</p>
+        <Users></Users>
         <Article title="Poverty"></Article>
-        <Article title="Lack of education"></Article>
-        <Article title="Road accidents"></Article>
+        <ul style={regularParaStyle}>
+          {
+            users.map(user => <li>{user.name + ' (' + user.views + ')'}</li>)
+          }
+        </ul>
+        <Counter></Counter>
       </header>
     </div>
   );
+}
+
+function Counter() {
+  const [count, setCount] = useState(2)
+  const doubleHandler = () => {
+    const newCount = count * 2;
+    setCount(newCount);
+  }
+  return (
+    <div>
+      <h2>Count: {count}</h2>
+      <button onClick={doubleHandler}>Double me</button>
+    </div>
+  )
+} 
+
+function Users() {
+  const [users, setUsers] = useState([]);
+  useEffect(() => {
+    fetch('https://jsonplaceholder.typicode.com/users')
+    .then(res => res.json())
+    .then(data => setUsers(data))
+  })
+  
+  return (
+    <ul>
+      {
+        users.map(user => <li>{user.username}</li>)
+      }
+    </ul>
+  )
 }
 
 function Article(props) {
